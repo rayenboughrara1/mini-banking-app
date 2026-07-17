@@ -5,8 +5,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8081
+          "Host": "account-service-container",
+            "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/accounts/{everything}",
@@ -17,8 +17,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8081
+          "Host": "account-service-container",
+            "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/accounts",
@@ -29,8 +29,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8082
+          "Host": "transaction-service-container",
+"Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/transactions/{everything}",
@@ -41,8 +41,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 8082
+          "Host": "transaction-service-container",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/transactions",
