@@ -30,7 +30,7 @@ app.MapPost("/transactions", async (Transaction transaction) =>
     transactions.Add(transaction);
 
     // Publish a message to RabbitMQ
-    var factory = new ConnectionFactory { HostName = "rabbitmq-container" };
+    var factory = new ConnectionFactory { HostName = "rabbitmq-service" };
     using var connection = await factory.CreateConnectionAsync();
     using var channel = await connection.CreateChannelAsync();
 

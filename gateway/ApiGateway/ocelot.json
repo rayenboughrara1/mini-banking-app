@@ -5,7 +5,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "account-service-container",
+          "Host": "account-service-service",
             "Port": 8080
         }
       ],
@@ -17,7 +17,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "account-service-container",
+          "Host": "account-service-service",
             "Port": 8080
         }
       ],
@@ -29,8 +29,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "transaction-service-container",
-"Port": 8080
+          "Host": "transaction-service-service",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/transactions/{everything}",
@@ -41,7 +41,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "transaction-service-container",
+          "Host": "transaction-service-service",
           "Port": 8080
         }
       ],
