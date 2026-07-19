@@ -8,9 +8,29 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var factory = new ConnectionFactory { HostName = "rabbitmq-service" };
+        logger.LogInformation("NotificationService v3 starting, attempting RabbitMQ connection...");
 
-        using var connection = await factory.CreateConnectionAsync(stoppingToken);
+        var factory = new ConnectionFactory { HostName = "rabbitmq-service" };
+        IConnection? connection = null;
+        int attempt = 0;
+
+        while (connection is null && !stoppingToken.IsCancellationRequested)
+        {
+            attempt++;
+            try
+            {
+                connection = await factory.CreateConnectionAsync(stoppingToken);
+                logger.LogInformation("Connected to RabbitMQ on attempt {attempt}", attempt);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning("Attempt {attempt} to connect to RabbitMQ failed: {message}. Retrying in 5 seconds...", attempt, ex.Message);
+                await Task.Delay(5000, stoppingToken);
+            }
+        }
+
+        if (connection is null) return;
+
         using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
         await channel.QueueDeclareAsync(
@@ -20,7 +40,8 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
             autoDelete: false,
             cancellationToken: stoppingToken);
 
-        logger.LogInformation("NotificationService v2 is listening on 'transactions-queue'...");
+        logger.LogInformation("NotificationService is listening on 'transactions-queue'...");
+
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (model, ea) =>
         {
@@ -36,7 +57,6 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
             consumer: consumer,
             cancellationToken: stoppingToken);
 
-        // Keep the worker alive
         while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(1000, stoppingToken);
