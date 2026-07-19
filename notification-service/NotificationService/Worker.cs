@@ -20,8 +20,7 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
             autoDelete: false,
             cancellationToken: stoppingToken);
 
-        logger.LogInformation("NotificationService is listening on 'transactions-queue'...");
-
+        logger.LogInformation("NotificationService v2 is listening on 'transactions-queue'...");
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (model, ea) =>
         {
