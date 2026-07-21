@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="header">
+    <h1>Mini Banking App</h1>
+    <button (click)="logout()">Log Out</button>
+  </div>
+
+  <section>
+    <h2>Accounts</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Owner</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (account of accounts(); track account.id) {
+          <tr>
+            <td>{{ account.id }}</td>
+            <td>{{ account.ownerName }}</td>
+            <td>{{ account.balance | number:'1.2-2' }} DT</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Make a Transfer</h2>
+    <form (ngSubmit)="makeTransfer()">
+      <label>
+        From Account ID:
+        <input type="number" [(ngModel)]="fromAccountId" name="fromAccountId" required />
+      </label>
+      <label>
+        To Account ID:
+        <input type="number" [(ngModel)]="toAccountId" name="toAccountId" required />
+      </label>
+      <label>
+        Amount:
+        <input type="number" [(ngModel)]="amount" name="amount" required />
+      </label>
+      <button type="submit">Transfer</button>
+    </form>
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+  </section>
+
+  <section>
+    <h2>Transactions</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Amount</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (tx of transactions(); track tx.id) {
+          <tr>
+            <td>{{ tx.id }}</td>
+            <td>{{ tx.fromAccountId }}</td>
+            <td>{{ tx.toAccountId }}</td>
+            <td>{{ tx.amount | number:'1.2-2' }} DT</td>
+            <td>{{ tx.timestamp | date:'short' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+</div>

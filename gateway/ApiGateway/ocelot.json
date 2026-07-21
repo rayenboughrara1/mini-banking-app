@@ -6,7 +6,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "account-service-service",
-            "Port": 8080
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/accounts/{everything}",
@@ -18,7 +18,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "account-service-service",
-            "Port": 8080
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/api/accounts",
@@ -47,6 +47,18 @@
       ],
       "UpstreamPathTemplate": "/api/transactions",
       "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "auth-service-service",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/api/login",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {

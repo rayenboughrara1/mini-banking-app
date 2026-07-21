@@ -1,31 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transaction-service-deployment
+  name: auth-service-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: transaction-service
+      app: auth-service
   template:
     metadata:
       labels:
-        app: transaction-service
+        app: auth-service
     spec:
       containers:
-        - name: transaction-service
-          image: 1bogh/transaction-service:v2
-          imagePullPolicy: Always
+        - name: auth-service
+          image: 1bogh/auth-service:v1
           ports:
             - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: transaction-service-service
+  name: auth-service-service
 spec:
   selector:
-    app: transaction-service
+    app: auth-service
   ports:
     - port: 8080
       targetPort: 8080

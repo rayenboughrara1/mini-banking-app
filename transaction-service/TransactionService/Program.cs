@@ -2,8 +2,31 @@ using Scalar.AspNetCore;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var jwtKey = builder.Configuration["Jwt:Key"]!;
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
+var jwtAudience = builder.Configuration["Jwt:Audience"]!;
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddOpenApi();
 
@@ -17,11 +40,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 var transactions = new List<Transaction>();
 var nextId = 1;
 
 app.MapGet("/transactions", () => transactions)
-    .WithName("GetAllTransactions");
+    .WithName("GetAllTransactions")
+    .RequireAuthorization();
 
 app.MapPost("/transactions", async (Transaction transaction) =>
 {
@@ -29,7 +56,6 @@ app.MapPost("/transactions", async (Transaction transaction) =>
     transaction.Timestamp = DateTime.UtcNow;
     transactions.Add(transaction);
 
-    // Publish a message to RabbitMQ
     var factory = new ConnectionFactory { HostName = "rabbitmq-service" };
     using var connection = await factory.CreateConnectionAsync();
     using var channel = await connection.CreateChannelAsync();
@@ -50,6 +76,7 @@ app.MapPost("/transactions", async (Transaction transaction) =>
 
     return Results.Created($"/transactions/{transaction.Id}", transaction);
 })
-    .WithName("CreateTransaction");
+    .WithName("CreateTransaction")
+    .RequireAuthorization();
 
 app.Run();

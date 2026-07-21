@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: 1bogh/api-gateway:latest
+          image: 1bogh/api-gateway:v4
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 ---

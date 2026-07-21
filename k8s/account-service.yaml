@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: account-service
-          image: 1bogh/account-service:latest
+          image: 1bogh/account-service:v2
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 ---
