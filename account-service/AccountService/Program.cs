@@ -1,4 +1,3 @@
-cd C:\Users\bogho\OneDrive\Desktop\mini-banking-app\transaction-service\TransactionService
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
